@@ -10,7 +10,7 @@ interface Props {
 export const HintCard = ({ className, _valid, _issue }: Props) => {
 	return (
 		<div
-			className={`flex flex-col overflow-hidden ${className} rounded-xl ${
+			className={`flex flex-col max-w-96 overflow-hidden ${className} rounded-xl ${
 				_valid ? "border-green-500" : "border-red-500"
 			} ${_valid ? "bg-green-400" : "bg-red-400"}`}>
 			<div className={`${_valid ? "bg-green-500" : "bg-red-500"}`}>
