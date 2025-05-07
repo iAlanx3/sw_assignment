@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 import PQ from "../../entityTypeIndicator.json";
 
@@ -15,12 +14,16 @@ function isNumeric(char: string): boolean {
 interface hintBox {
 	_valid?: boolean;
 	_category?: string;
-	_issue?: string[];
+	_issue: string[];
 }
 
-export default function InputField() {
+interface Props {
+	setHint: React.Dispatch<React.SetStateAction<hintBox>>;
+}
+
+export const InputField = ({ setHint }: Props) => {
 	const [input, setInput] = useState("");
-	const [submittedInput, setSubmittedInput] = useState("");
+	const hint: hintBox = { _issue: [] };
 
 	/**
 	 * @param ch the T of Tyy in the UEN
@@ -31,39 +34,42 @@ export default function InputField() {
 	}
 
 	function processInput(_userinput: string): void {
-		const hint: hintBox = { _issue: [] };
+		//const hint: hintBox = { _issue: [] };
 		//Format only has 9 or 10 characters
 		if (_userinput.length < 9 || _userinput.length > 10) {
 			hint._category = "Unknown";
 			hint._valid = false;
-			//TODO: setState prop pass from card component
+			hint._issue.push("UEN should be 9-10 characters long.");
+			setHint(hint);
+			return;
 		} else {
 			switch (_userinput.length) {
 				case 9:
+					hint._category = "Businesses (ACRA)";
+					/**
+					 * Scenario one: Error in first 8 characters; there exist alphabet
+					 */
 					for (let i = 0; i < 8; i++) {
-						hint._category = "Businesses (ACRA)";
-						/**
-						 * Scenario one: Error in first 8 characters; there exist alphabet
-						 */
 						if (isAlphabet(_userinput.charAt(i))) {
 							hint._valid = false;
 							hint._issue?.push(
 								"There should be no alphabets in the first 8 characters."
 							);
+							break;
 						}
-						/**
-						 * Scenario two: All correct - first 8 are digit and last char is alphabet
-						 * Scenario three: Error in check alphabet; it is a digit instead
-						 */
-						if (isAlphabet(_userinput.charAt(8)) && hint._valid !== false) {
-							hint._valid = true;
-							hint._issue?.push(
-								'The inputted string complies with the format of "Businesses (ACRA)"'
-							);
-						} else if (!isAlphabet(_userinput.charAt(8))) {
-							hint._valid = false;
-							hint._issue?.push("The last character should be an alphabet");
-						}
+					}
+					/**
+					 * Scenario two: All correct - first 8 are digit and last char is alphabet
+					 * Scenario three: Error in check alphabet; it is a digit instead
+					 */
+					if (isAlphabet(_userinput.charAt(8)) && hint._valid !== false) {
+						hint._valid = true;
+						hint._issue?.push(
+							'The inputted string complies with the format of "Businesses (ACRA)"'
+						);
+					} else if (!isAlphabet(_userinput.charAt(8))) {
+						hint._valid = false;
+						hint._issue?.push("The last character should be an alphabet");
 					}
 					break;
 				default: //userinput.length === 10
@@ -173,15 +179,17 @@ export default function InputField() {
 					break;
 			}
 		}
+		setHint(hint);
 	}
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault(); // Prevent page reload
-		setSubmittedInput(input); // Set state on Enter
+		processInput(input);
+		//setSubmittedInput(input); // Set state on Enter
 	};
 
 	return (
-		<form className="flex flex-row gap-x-4" onSubmit={handleSubmit}>
+		<form className="flex flex-row gap-x-4 mx-auto" onSubmit={handleSubmit}>
 			<div>Enter the UEN:</div>
 			<input
 				type="text"
@@ -190,7 +198,6 @@ export default function InputField() {
 				name="query"
 				className="border-b-2 pl-1 pr-1"
 			/>
-			<p>Submitted: {submittedInput}</p>
 		</form>
 	);
-}
+};

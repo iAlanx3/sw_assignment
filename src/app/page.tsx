@@ -1,12 +1,30 @@
+"use client";
 import Image from "next/image";
-import InputField from "./components/InputField";
+import { InputField } from "./components/InputField";
+import { HintCard } from "./components/HintCard";
+import { useState } from "react";
+
+interface hintBox {
+	_valid?: boolean;
+	_category?: string;
+	_issue: string[];
+}
 
 export default function Home() {
+	const [hint, setHint] = useState<hintBox>({ _issue: [] });
 	return (
 		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
 			<main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
 				<h1 className="mx-auto">UEN Validator</h1>
-				<InputField />
+				<InputField setHint={setHint} />
+				{hint._issue.map((h, index) => (
+					<HintCard
+						className="hint-card"
+						key={index}
+						_valid={hint._valid}
+						_issue={hint._issue}
+					/>
+				))}
 			</main>
 			<footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
 				<a
