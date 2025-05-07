@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PQ from "../../entityTypeIndicator.json";
 
 //Convert to hashmap for faster access
@@ -38,8 +38,6 @@ export default function InputField() {
 			hint._valid = false;
 			//TODO: setState prop pass from card component
 		} else {
-			let num_digit: number = 0;
-			let num_alphabet: number = 0;
 			switch (_userinput.length) {
 				case 9:
 					for (let i = 0; i < 8; i++) {
@@ -71,10 +69,11 @@ export default function InputField() {
 				default: //userinput.length === 10
 					//Optional checking to ensure that year of issuance should be valid, aka <= now
 					const currentYear: number = new Date().getFullYear();
+					let year: number;
 					//issue new UEN starts with alphabet
 					if (isAlphabet(_userinput.charAt(0))) {
 						hint._category = "Local Companies (ACRA)";
-						let year: number = tToNumber(_userinput.charAt(0)) * 1000;
+						year = tToNumber(_userinput.charAt(0)) * 1000;
 						if (
 							isNumeric(_userinput.charAt(1)) &&
 							isNumeric(_userinput.charAt(1))
@@ -127,54 +126,54 @@ export default function InputField() {
 						}
 					} else {
 						//local companies starts with digit
+						//Check 2nd to 4th characters
+						for (let i = 1; i < 4; i++) {
+							if (isAlphabet(_userinput.charAt(i))) {
+								hint._valid = false;
+								hint._issue?.push(
+									"There should only be digits for the first four characters."
+								);
+								break;
+							}
+						}
+						//Check for validity of year of issuance
+						if (hint._valid !== false) {
+							year = parseInt(_userinput.substring(0, 5), 10);
+							if (year > currentYear) {
+								hint._valid = false;
+								hint._issue?.push(
+									"The year of issuance cannot be in the future."
+								);
+							}
+						}
+
+						//check 5th to 9th character
+						for (let i = 4; i < 9; i++) {
+							if (isAlphabet(_userinput.charAt(i))) {
+								hint._valid = false;
+								hint._issue?.push(
+									"There should only be digits from the 5th to 9th character."
+								);
+							}
+						}
+
+						//Check if last character is check alphabet
+						if (!isAlphabet(_userinput.charAt(9))) {
+							hint._valid = false;
+							hint._issue?.push("The last character should be an alphabet");
+						}
+
+						if (hint._valid !== false) {
+							hint._valid = true;
+							hint._issue?.push(
+								'The inputted string complies with the format of "Local Companies (ACRA)"'
+							);
+						}
 					}
 					break;
 			}
 		}
 	}
-
-	useEffect(() => {
-		if (input.length >= 9 && input.length <= 10) {
-			const hint: hintBox = { _issue: [] };
-			let alphabet: number = 0;
-			let digit: number = 0;
-
-			switch (input.length) {
-				case 9:
-					hint._category = "A";
-					for (let i = 0; i < 8; i++) {
-						if (isNumeric(input.charAt(i))) {
-							digit++;
-						}
-					}
-					if (isAlphabet(input.charAt(8))) alphabet++;
-
-					if (digit == 8 && alphabet == 1) {
-						hint._valid = true;
-					} else {
-						hint._valid = false;
-						if (alphabet == 0) hint._issue?.push("No check alphabet");
-						if (digit !== 8)
-							hint._issue?.push("First 8 characters are not purely digits");
-					}
-					break;
-				case 10:
-					//TODO: Check if 4th and 5th character belongs to the PQ entities
-					//If yes,
-					for (let i = 0; i < 3; i++) {
-						if (isNumeric(input.charAt(i))) digit++;
-					}
-					if (digit !== 3) {
-						hint._category = "B|C";
-						hint._valid = false;
-						hint._issue?.push("First three char should be digit");
-						break;
-					}
-
-					break;
-			}
-		}
-	}, [input]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault(); // Prevent page reload
