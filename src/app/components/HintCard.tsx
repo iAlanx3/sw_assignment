@@ -2,25 +2,30 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
-	className?: string;
-	_valid?: boolean;
-	_issue?: string[];
+	className: string;
+	_valid: boolean;
+	_category: string;
+	_issue: string;
 }
 
-export const HintCard = ({ className, _valid, _issue }: Props) => {
+export const HintCard = ({ className, _valid, _category, _issue }: Props) => {
 	return (
 		<div
-			className={`flex flex-col max-w-96 overflow-hidden ${className} rounded-xl ${
-				_valid ? "border-green-500" : "border-red-500"
-			} ${_valid ? "bg-green-400" : "bg-red-400"}`}>
-			<div className={`${_valid ? "bg-green-500" : "bg-red-500"}`}>
+			className={`flex flex-col max-w-[400px] w-full overflow-hidden rounded-xl border-2 ${className} ${
+				_valid ? "border-green-500 bg-green-400" : "border-red-500 bg-red-400"
+			}`}>
+			<div
+				className={`flex flex-row gap-x-4 ${
+					_valid ? "bg-green-500" : "bg-red-500"
+				}`}>
 				{_valid ? (
 					<DoneIcon className=" pl-1 pt-1 pb-1 " />
 				) : (
 					<CloseIcon className=" pl-1 pt-1 pb-1 " />
 				)}
+				<p className=" fill-black">{_category}</p>
 			</div>
-			<div className="flex text-wrap pl-2 pr-2 pb-1">{_issue}</div>
+			<div className="w-full break-words whitespace-pre-wrap p-2">{_issue}</div>
 		</div>
 	);
 };

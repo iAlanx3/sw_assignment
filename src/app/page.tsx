@@ -1,75 +1,33 @@
 "use client";
-import Image from "next/image";
 import { InputField } from "./components/InputField";
 import { HintCard } from "./components/HintCard";
 import { useState } from "react";
 
 interface hintBox {
-	_valid?: boolean;
-	_category?: string;
-	_issue: string[];
+	_valid: boolean;
+	_category: string;
+	_issue: string;
 }
 
 export default function Home() {
-	const [hint, setHint] = useState<hintBox>({ _issue: [] });
+	const [hint, setHint] = useState<hintBox[]>([]);
 	return (
-		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+		<div className="flex flex-col min-h-screen items-center justify-center px-8 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
+			<main className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-8 items-center z-10">
 				<h1 className="mx-auto">UEN Validator</h1>
 				<InputField setHint={setHint} />
-				{hint._issue.map((h, index) => (
+			</main>
+			<div className="flex flex-col w-full items-center mt-[60vh] gap-y-4">
+				{hint.map((h, index) => (
 					<HintCard
-						className="hint-card"
+						className="hint-card w-full max-w-md"
 						key={index}
-						_valid={hint._valid}
-						_issue={hint._issue}
+						_issue={h._issue}
+						_category={h._category}
+						_valid={h._valid}
 					/>
 				))}
-			</main>
-			<footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer">
-					<Image
-						aria-hidden
-						src="/file.svg"
-						alt="File icon"
-						width={16}
-						height={16}
-					/>
-					Learn
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer">
-					<Image
-						aria-hidden
-						src="/window.svg"
-						alt="Window icon"
-						width={16}
-						height={16}
-					/>
-					Examples
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer">
-					<Image
-						aria-hidden
-						src="/globe.svg"
-						alt="Globe icon"
-						width={16}
-						height={16}
-					/>
-					Go to nextjs.org →
-				</a>
-			</footer>
+			</div>
 		</div>
 	);
 }
