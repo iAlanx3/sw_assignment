@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import PQ from "../../entityTypeIndicator.json";
+import PQ from "../../../entityTypeIndicator.json";
 
 //Convert to hashmap for faster access
 const pqMap: Map<string, string> = new Map<string, string>(Object.entries(PQ));
