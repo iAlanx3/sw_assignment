@@ -32,8 +32,11 @@ interface Forecast {
 
 export default function WeatherForecast_Page() {
 	const [weatherData, setweatherData] = useState<WeatherData | null>(null);
-	const [location, setLocations] = useState<string[]>([]);
-	//Fetch and reset data every minute
+	const [locations, setLocations] = useState<string[]>([]);
+	const [selectedArea, setSelectedArea] = useState<string>("");
+	const [forecast, setForecast] = useState<string>("");
+	const [timeDate, setTimeDate] = useState<string[]>([]);
+	//TODO: Fetch and reset data every minute?
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -64,10 +67,56 @@ export default function WeatherForecast_Page() {
 
 		return data.map((area: AreaMetadata) => area.name);
 	}
+
+	function getForecastByArea(areaName: string): string {
+		if (!weatherData) {
+			return "";
+		}
+
+		const forecastItem = weatherData.items.find((item) =>
+			item.forecasts.some((forecast) => forecast.area === areaName)
+		);
+
+		// If forecast for the area is found, return the forecast
+		if (forecastItem) {
+			const areaForecast = forecastItem.forecasts.find(
+				(forecast) => forecast.area === areaName
+			);
+			return areaForecast ? areaForecast.forecast : "";
+		}
+
+		return "";
+	}
+
+	function getValidTime(): string[] {
+		if (!weatherData) {
+			return [];
+		}
+
+		const item = weatherData.items[0];
+		//Valid from, Valid until, data last updated at
+		return [
+			`${item.valid_period.start}`,
+			`${item.valid_period.end}`,
+			`${item.update_timestamp}`
+		];
+	}
+
+	function updateLocation(_location: string): void {
+		setSelectedArea(_location);
+		setForecast(getForecastByArea(_location));
+		setTimeDate(getValidTime);
+	}
+
 	return (
 		<div className="flex flex-col lg:flex-row gap-x-4 min-h-screen items-stretch justify-center pt-20 px-8 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
 			<div className="flex-1 max-h-full border border-black p-4">
-				<WeatherForm mapName={location} />
+				<WeatherForm
+					mapName={locations}
+					updateLocation={updateLocation}
+					forecast={forecast}
+					timeDate={timeDate}
+				/>
 			</div>
 			<div className="flex-1 border border-black p-4">TODO: Google Map</div>
 		</div>
