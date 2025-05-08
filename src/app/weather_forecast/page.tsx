@@ -36,9 +36,13 @@ export default function WeatherForecast_Page() {
 	const [selectedArea, setSelectedArea] = useState<string>("");
 	const [forecast, setForecast] = useState<string>("");
 	const [timeDate, setTimeDate] = useState<string[]>([]);
-	//TODO: Fetch and reset data every minute?
+
 	useEffect(() => {
-		fetchData();
+		fetchData(); //Run when page first load
+		//Refresh data every 10 minutes
+		const interval = setInterval(fetchData, 10 * 60 * 1000);
+		//Clean up interval when done to prevent it from continuing in the background and causing issue
+		return () => clearInterval(interval);
 	}, []);
 
 	async function fetchData() {

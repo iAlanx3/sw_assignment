@@ -8,6 +8,7 @@ import WaterOutlinedIcon from "@mui/icons-material/WaterOutlined";
 import AirOutlinedIcon from "@mui/icons-material/AirOutlined";
 import ThunderstormOutlinedIcon from "@mui/icons-material/ThunderstormOutlined";
 import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined";
+import Link from "next/link";
 
 interface Props {
 	mapName: string[];
@@ -99,7 +100,7 @@ export const WeatherForm = ({
 	}
 
 	return (
-		<div className="flex flex-col gap-y-4 mx-auto">
+		<div className="flex flex-col gap-y-4 mx-auto h-full">
 			<Autocomplete
 				disablePortal
 				options={mapName}
@@ -113,11 +114,10 @@ export const WeatherForm = ({
 			{forecast === "" || timeDate.length === 0 ? (
 				<></>
 			) : (
-				<div className="flex flex-col w-full">
+				<div className="flex flex-col w-full h-full justify-between">
 					<h1 className="font-bold mx-auto">2-Hour Weather Forecast</h1>
 					<p>From: {timeStampToReadable(timeDate[0])}</p>
 					<p>To: {timeStampToReadable(timeDate[1])}</p>
-					<p>Data last updated at: {timeStampToReadable(timeDate[2])}</p>
 					<p className="mx-auto pt-4 font-semibold">{forecast}</p>
 					<div className="mx-auto w-1/2 h-1/2 flex items-center justify-center">
 						{React.cloneElement(getIconByForecast(forecast) as JSX.Element, {
@@ -125,6 +125,17 @@ export const WeatherForm = ({
 							style: { width: "50%", height: "50%" }
 						})}
 					</div>
+					<footer className="text-sm text-center pb-2">
+						<div className="flex flex-row gap-x-1 items-center justify-center">
+							<p>Weather data pulled from: </p>
+							<Link
+								className=" text-blue-400"
+								href="https://data.gov.sg/datasets/d_3f9e064e25005b0e42969944ccaf2e7a/view">
+								data.gov.sg
+							</Link>
+						</div>
+						<p>Data last updated at: {timeStampToReadable(timeDate[2])}</p>
+					</footer>
 				</div>
 			)}
 		</div>
