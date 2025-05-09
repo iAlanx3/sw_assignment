@@ -40,3 +40,26 @@ body {
   animation: slideDown 0.4s ease-out;
 }
 
+.link-card {
+  width: 30%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border: 2px black solid;
+  border-radius: 25px;
+  box-shadow: 8px 4px 4px black;  
+  max-width: 300px; 
+  max-height: 300px; 
+}
+
+.link-card:hover {
+  background-color: gray;
+}
+
+@media (orientation: portrait) {
+  .link-card {
+    aspect-ratio: 4 / 1; /* Width is 4 times height in portrait */
+    width: 80%; /* You can adjust this to fit your needs */
+    height: auto; /* Height is calculated based on aspect ratio */
+  }
+}
+
