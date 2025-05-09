@@ -54,6 +54,7 @@ export const WeatherForm = ({
 					updateLocation(newValue ?? "");
 				}}
 				sx={{ width: "100%" }}
+				style={{ backgroundColor: "white" }}
 				renderInput={(params) => <TextField {...params} label="Location" />}
 			/>
 			{forecast === "" || timeDate.length === 0 ? (

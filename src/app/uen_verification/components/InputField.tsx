@@ -348,7 +348,7 @@ export const InputField = ({ setHint }: Props) => {
 				value={input}
 				onChange={(e) => setInput(e.target.value)}
 				name="query"
-				className="border-b-2 pl-1 pr-1"
+				className="border-2 rounded-xl pl-3 pr-2 bg-white"
 			/>
 		</form>
 	);
