@@ -340,7 +340,9 @@ export const InputField = ({ setHint }: Props) => {
 	};
 
 	return (
-		<form className="flex flex-row gap-x-4 mx-auto" onSubmit={handleSubmit}>
+		<form
+			className="flex flex-col gap-y-4 w-full mx-auto"
+			onSubmit={handleSubmit}>
 			<div>Enter the UEN:</div>
 			<input
 				type="text"
