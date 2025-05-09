@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { WeatherForm } from "./components/WeatherForm";
+import { WeatherMap } from "./components/WeatherMap";
 
 interface WeatherData {
 	code: number;
@@ -36,33 +37,33 @@ export default function WeatherForecast_Page() {
 	const [selectedArea, setSelectedArea] = useState<string>("");
 	const [forecast, setForecast] = useState<string>("");
 	const [timeDate, setTimeDate] = useState<string[]>([]);
+	const [geolocation, setGeolocation] = useState<number[]>([1.3521, 103.8198]);
 
 	useEffect(() => {
+		async function fetchData() {
+			try {
+				const res = await fetch("../api/weather_forecast");
+
+				if (!res.ok) {
+					const text = await res.text();
+					console.error("Error response text:", text);
+					throw new Error(`Failed to fetch. Status: ${res.status}`);
+				}
+
+				const data = await res.json();
+				setweatherData(data);
+				const locations = mapOutAreaName(data.area_metadata);
+				setLocations(locations);
+			} catch (error) {
+				console.error("Error fetching weather data:", error);
+			}
+		}
 		fetchData(); //Run when page first load
 		//Refresh data every 10 minutes
 		const interval = setInterval(fetchData, 10 * 60 * 1000);
 		//Clean up interval when done to prevent it from continuing in the background and causing issue
 		return () => clearInterval(interval);
 	}, []);
-
-	async function fetchData() {
-		try {
-			const res = await fetch("../api/weather_forecast");
-
-			if (!res.ok) {
-				const text = await res.text();
-				console.error("Error response text:", text);
-				throw new Error(`Failed to fetch. Status: ${res.status}`);
-			}
-
-			const data = await res.json();
-			setweatherData(data);
-			const locations = mapOutAreaName(data.area_metadata);
-			setLocations(locations);
-		} catch (error) {
-			console.error("Error fetching weather data:", error);
-		}
-	}
 
 	function mapOutAreaName(data: AreaMetadata[] | undefined): string[] {
 		if (!data || !Array.isArray(data)) {
@@ -106,10 +107,24 @@ export default function WeatherForecast_Page() {
 		];
 	}
 
+	function getLongLatfromName(areaName: string): number[] {
+		if (!weatherData || !weatherData.area_metadata) return [];
+
+		const item: AreaMetadata | undefined = weatherData.area_metadata.find(
+			(item) => item.name === areaName
+		);
+
+		if (!item) return [];
+
+		const { latitude, longitude } = item.label_location;
+		return [latitude, longitude];
+	}
+
 	function updateLocation(_location: string): void {
 		setSelectedArea(_location);
 		setForecast(getForecastByArea(_location));
 		setTimeDate(getValidTime);
+		setGeolocation(getLongLatfromName(_location));
 	}
 
 	return (
@@ -122,7 +137,9 @@ export default function WeatherForecast_Page() {
 					timeDate={timeDate}
 				/>
 			</div>
-			<div className="flex-1 border border-black p-4">TODO: Google Map</div>
+			<div className="flex-1 border border-black p-4">
+				<WeatherMap latitude={geolocation[0]} longitude={geolocation[1]} />
+			</div>
 		</div>
 	);
 }

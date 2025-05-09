@@ -1,4 +1,4 @@
-import { JSX, useState } from "react";
+import { JSX } from "react";
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -66,8 +66,6 @@ export const WeatherForm = ({
 	timeDate,
 	updateLocation
 }: Props) => {
-	const [input, setInput] = useState<string>("");
-
 	function timeStampToReadable(timeStamp: string): string {
 		const [date, time] = timeStamp.split("T");
 		const friendlyDate = formatDateString(date);
@@ -105,7 +103,6 @@ export const WeatherForm = ({
 				disablePortal
 				options={mapName}
 				onChange={(event: any, newValue: string | null) => {
-					setInput(newValue ?? "");
 					updateLocation(newValue ?? "");
 				}}
 				sx={{ width: "100%" }}
