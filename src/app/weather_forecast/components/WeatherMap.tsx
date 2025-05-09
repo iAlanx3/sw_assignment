@@ -16,7 +16,7 @@ export const WeatherMap = ({ latitude, longitude, weather, icon }: Props) => {
 	}
 
 	return (
-		<div className="flex items-center justify-center w-full min-h-[300px] h-[300px] sm:h-[400px]">
+		<div className="flex items-center justify-center w-full  h-full">
 			<Map defaultCenter={defaultSGCoord} defaultZoom={10}>
 				<ZoomControl />
 				{weather && (
