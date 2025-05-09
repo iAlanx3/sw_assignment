@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { WeatherForm } from "./components/WeatherForm";
 import { WeatherMap } from "./components/WeatherMap";
+import { getIconByForecast } from "./components/sharedIcons";
+import { JSX } from "@emotion/react/jsx-runtime";
 
 interface WeatherData {
 	code: number;
@@ -38,6 +40,7 @@ export default function WeatherForecast_Page() {
 	const [forecast, setForecast] = useState<string>("");
 	const [timeDate, setTimeDate] = useState<string[]>([]);
 	const [geolocation, setGeolocation] = useState<number[]>([1.3521, 103.8198]);
+	const [weather_icon, setWeather_Icon] = useState<JSX.Element>();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -123,22 +126,31 @@ export default function WeatherForecast_Page() {
 	function updateLocation(_location: string): void {
 		setSelectedArea(_location);
 		setForecast(getForecastByArea(_location));
-		setTimeDate(getValidTime);
+		setTimeDate(getValidTime());
 		setGeolocation(getLongLatfromName(_location));
+		setWeather_Icon(getIconByForecast(forecast));
 	}
 
 	return (
-		<div className="flex flex-col lg:flex-row gap-x-4 min-h-screen items-stretch justify-center pt-20 px-8 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
+		<div className="flex flex-col sm:flex-row gap-y-4 sm:gap-x-4 min-h-screen items-stretch justify-center pt-20 px-8 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
 			<div className="flex-1 max-h-full border border-black p-4">
 				<WeatherForm
 					mapName={locations}
 					updateLocation={updateLocation}
 					forecast={forecast}
+					icon={weather_icon}
 					timeDate={timeDate}
 				/>
 			</div>
-			<div className="flex-1 border border-black p-4">
-				<WeatherMap latitude={geolocation[0]} longitude={geolocation[1]} />
+			<div className="flex-1 max-h-full border border-black p-4">
+				<div className="w-full h-full">
+					<WeatherMap
+						latitude={geolocation[0]}
+						longitude={geolocation[1]}
+						weather={forecast}
+						icon={weather_icon}
+					/>
+				</div>
 			</div>
 		</div>
 	);

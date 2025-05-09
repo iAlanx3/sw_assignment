@@ -2,68 +2,21 @@ import { JSX } from "react";
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
-import WaterOutlinedIcon from "@mui/icons-material/WaterOutlined";
-import AirOutlinedIcon from "@mui/icons-material/AirOutlined";
-import ThunderstormOutlinedIcon from "@mui/icons-material/ThunderstormOutlined";
-import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined";
 import Link from "next/link";
 
 interface Props {
 	mapName: string[];
 	forecast: string;
 	timeDate: string[];
+	icon?: JSX.Element;
 	updateLocation: (location: string) => void;
 }
-
-const weatherIcon = [
-	{
-		names: ["Fair", "Fair (Day)", "Fair (Night)"],
-		image: <WbSunnyOutlinedIcon />
-	},
-	{
-		names: [
-			"Partly Cloudy",
-			"Partly Cloudy (Day)",
-			"Partly Cloudy (Night)",
-			"Cloudy"
-		],
-		image: <CloudOutlinedIcon />
-	},
-	{
-		names: ["Hazy", "Slightly Hazy", "Mist", "Fog"],
-		image: <WaterOutlinedIcon />
-	},
-	{
-		names: ["Windy"],
-		image: <AirOutlinedIcon />
-	},
-	{
-		names: [
-			"Light Rain",
-			"Moderate Rain",
-			"Heavy Rain",
-			"Passing Showers",
-			"Light Showers",
-			"Heavy Showers"
-		],
-		image: <WaterDropOutlinedIcon />
-	},
-	{
-		names: [
-			"Thundery Showers",
-			"Heavy Thundery Showers",
-			"Heavy Thundery Showers with Gusty Winds"
-		],
-		image: <ThunderstormOutlinedIcon />
-	}
-];
 
 export const WeatherForm = ({
 	mapName,
 	forecast,
 	timeDate,
+	icon,
 	updateLocation
 }: Props) => {
 	function timeStampToReadable(timeStamp: string): string {
@@ -92,11 +45,6 @@ export const WeatherForm = ({
 		return `${day} ${month} ${year}`;
 	}
 
-	function getIconByForecast(name: string) {
-		const match = weatherIcon.find((item) => item.names.includes(name));
-		return match?.image ?? null;
-	}
-
 	return (
 		<div className="flex flex-col gap-y-4 mx-auto h-full">
 			<Autocomplete
@@ -117,10 +65,11 @@ export const WeatherForm = ({
 					<p>To: {timeStampToReadable(timeDate[1])}</p>
 					<p className="mx-auto pt-4 font-semibold">{forecast}</p>
 					<div className="mx-auto w-1/2 h-1/2 flex items-center justify-center">
-						{React.cloneElement(getIconByForecast(forecast) as JSX.Element, {
-							fontSize: "inherit",
-							style: { width: "50%", height: "50%" }
-						})}
+						{icon &&
+							React.cloneElement(icon, {
+								fontSize: "inherit",
+								style: { width: "50%", height: "50%" }
+							})}
 					</div>
 					<footer className="text-sm text-center pb-2">
 						<div className="flex flex-row gap-x-1 items-center justify-center">

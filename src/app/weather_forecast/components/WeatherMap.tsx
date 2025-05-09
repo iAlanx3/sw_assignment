@@ -1,24 +1,30 @@
+import { Map, Marker, ZoomControl } from "pigeon-maps";
+import { JSX } from "react";
+
 interface Props {
 	latitude: number;
 	longitude: number;
+	weather: string;
+	icon?: JSX.Element;
 }
 
-export const WeatherMap = ({ latitude, longitude }: Props) => {
-	const defaultSGCoord: number[] = [1.3521, 103.8198];
+export const WeatherMap = ({ latitude, longitude, weather, icon }: Props) => {
+	const defaultSGCoord: [number, number] = [1.3521, 103.8198];
 
-	const mapSrc = `https://maps.google.com/maps?q=${
-		latitude ?? defaultSGCoord[0]
-	},${
-		longitude ?? defaultSGCoord[1]
-	}&t=&z=14&ie=UTF8&iwloc=B&output=embed&z=11`;
+	function getCoordinates(): [number, number] {
+		return [latitude ?? defaultSGCoord[0], longitude ?? defaultSGCoord[1]];
+	}
 
 	return (
-		<>
-			<h3>Location Component</h3>
-			<div>
-				<p>Latitude: {latitude}</p>
-				<p>Longitude: {longitude}</p>
-			</div>
-		</>
+		<div className="flex items-center justify-center w-full h-full min-h-[300px]">
+			<Map defaultCenter={defaultSGCoord} defaultZoom={10}>
+				<ZoomControl />
+				{weather && (
+					<Marker anchor={getCoordinates()}>
+						<div style={{ fontSize: "24px" }}>{icon}</div>
+					</Marker>
+				)}
+			</Map>
+		</div>
 	);
 };
