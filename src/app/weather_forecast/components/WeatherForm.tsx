@@ -50,7 +50,7 @@ export const WeatherForm = ({
 			<Autocomplete
 				disablePortal
 				options={mapName}
-				onChange={(event: any, newValue: string | null) => {
+				onChange={(event: unknown, newValue: string | null) => {
 					updateLocation(newValue ?? "");
 				}}
 				sx={{ width: "100%" }}

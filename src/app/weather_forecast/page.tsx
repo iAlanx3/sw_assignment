@@ -36,7 +36,6 @@ interface Forecast {
 export default function WeatherForecast_Page() {
 	const [weatherData, setweatherData] = useState<WeatherData | null>(null);
 	const [locations, setLocations] = useState<string[]>([]);
-	const [selectedArea, setSelectedArea] = useState<string>("");
 	const [forecast, setForecast] = useState<string>("");
 	const [timeDate, setTimeDate] = useState<string[]>([]);
 	const [geolocation, setGeolocation] = useState<number[]>([1.3521, 103.8198]);
@@ -124,7 +123,6 @@ export default function WeatherForecast_Page() {
 	}
 
 	function updateLocation(_location: string): void {
-		setSelectedArea(_location);
 		setForecast(getForecastByArea(_location));
 		setTimeDate(getValidTime());
 		setGeolocation(getLongLatfromName(_location));
