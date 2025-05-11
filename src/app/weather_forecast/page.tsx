@@ -140,7 +140,7 @@ export default function WeatherForecast_Page() {
 					timeDate={timeDate}
 				/>
 			</div>
-			<div className="flex-1 aspect-[1/1] border border-black p-4 mr-4">
+			<div className="flex-1 aspect-[1/1] border border-black p-4 mr-8">
 				<WeatherMap
 					latitude={geolocation[0]}
 					longitude={geolocation[1]}
