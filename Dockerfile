@@ -1,41 +1,38 @@
-#lightweight base image
+# Lightweight base image
 FROM node:24-alpine AS base
-##new stage where depencies will be handed
+
+# Install dependencies
 FROM base AS deps
-##ensure compatibility with certain native modules
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-##ensure exact install as stated in package and package-lock jsons
 COPY package.json package-lock.json ./
 RUN npm ci
-##create another stage so that first stage will be skipped if package&package-lock don't change
+
+# Build the app
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
 RUN npm run build
 
-FROM build AS runner
+# Production runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
-ENV  NODE_ENV production
+ENV NODE_ENV=production
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs \
+    && adduser --system --uid 1001 nextjs
 
+# Copy necessary files
 COPY --from=builder /app/public ./public
-
-RUN mkdir .next
-RUN chwon nextjs:nodejs .next
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next./static ./.next/static
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 3000
+ENV PORT=3000
 
-ENV PORT 3000
-
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD ["node", "server.js"]

@@ -7,3 +7,5 @@ README.log
 !.next/static
 !.next/standalone
 .git
+.gitignore
+.env
