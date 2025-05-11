@@ -62,9 +62,9 @@ export const WeatherForm = ({
 			) : (
 				<div className="flex flex-col w-full h-full justify-between">
 					<h1 className="font-bold mx-auto">2-Hour Weather Forecast</h1>
-					<p>From: {timeStampToReadable(timeDate[0])}</p>
-					<p>To: {timeStampToReadable(timeDate[1])}</p>
-					<p className="mx-auto pt-4 font-semibold">{forecast}</p>
+					<p className="text-black">From: {timeStampToReadable(timeDate[0])}</p>
+					<p className="text-black">To: {timeStampToReadable(timeDate[1])}</p>
+					<p className="mx-auto pt-4 font-semibold text-black">{forecast}</p>
 					<div className="mx-auto w-1/2 h-1/2 flex items-center justify-center">
 						{icon &&
 							React.cloneElement(icon, {
@@ -73,15 +73,17 @@ export const WeatherForm = ({
 							})}
 					</div>
 					<footer className="text-sm text-center pb-2">
-						<div className="flex flex-row gap-x-1 items-center justify-center">
-							<p>Weather data pulled from: </p>
+						<div className="flex flex-row gap-x-1 items-center justify-center text-black">
+							<p className="text-black">Weather data pulled from: </p>
 							<Link
 								className=" text-blue-400"
 								href="https://data.gov.sg/datasets/d_3f9e064e25005b0e42969944ccaf2e7a/view">
 								data.gov.sg
 							</Link>
 						</div>
-						<p>Data last updated at: {timeStampToReadable(timeDate[2])}</p>
+						<p className="text-black">
+							Data last updated at: {timeStampToReadable(timeDate[2])}
+						</p>
 					</footer>
 				</div>
 			)}

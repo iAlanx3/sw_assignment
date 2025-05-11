@@ -22,9 +22,11 @@ export const HintCard = ({ _valid, _category, _issue }: Props) => {
 				) : (
 					<CloseIcon className=" pl-1 pt-1 pb-1 " />
 				)}
-				<p className=" fill-black">{_category}</p>
+				<p className=" fill-black text-black">{_category}</p>
 			</div>
-			<div className="w-full break-words whitespace-pre-wrap p-2">{_issue}</div>
+			<div className="w-full break-words whitespace-pre-wrap p-2 text-black">
+				{_issue}
+			</div>
 		</div>
 	);
 };

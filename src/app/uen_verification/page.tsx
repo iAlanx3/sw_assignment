@@ -14,7 +14,7 @@ export default function UENVerification_Page() {
 	return (
 		<div className="flex flex-col bg-gray-100 min-h-[101vh] items-center justify-start px-8 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
 			<div className="flex flex-col gap-8 items-center w-full max-w-md mt-[33vh]">
-				<h1 className="mx-auto font-bold text-2xl text-center">
+				<h1 className="mx-auto font-bold text-2xl text-center text-black">
 					UEN Validator
 				</h1>
 				<InputField setHint={setHint} />
