@@ -2,16 +2,15 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
-	className: string;
 	_valid: boolean;
 	_category: string;
 	_issue: string;
 }
 
-export const HintCard = ({ className, _valid, _category, _issue }: Props) => {
+export const HintCard = ({ _valid, _category, _issue }: Props) => {
 	return (
 		<div
-			className={`flex flex-col max-w-[400px] w-full overflow-hidden rounded-xl border-2 ${className} ${
+			className={`flex flex-col max-w-[400px] w-full overflow-hidden rounded-xl border-2 hint-card ${
 				_valid ? "border-green-500 bg-green-400" : "border-red-500 bg-red-400"
 			}`}>
 			<div

@@ -13,16 +13,15 @@ export default function UENVerification_Page() {
 	const [hint, setHint] = useState<hintBox[]>([]);
 	return (
 		<div className="flex flex-col bg-gray-100 min-h-[101vh] items-center justify-start px-8 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-8 items-center w-full max-w-md mt-[33vh]">
+			<div className="flex flex-col gap-8 items-center w-full max-w-md mt-[33vh]">
 				<h1 className="mx-auto font-bold text-2xl text-center">
 					UEN Validator
 				</h1>
 				<InputField setHint={setHint} />
-			</main>
+			</div>
 			<div className="flex flex-col items-center w-full mt-5 gap-y-4 px-4">
 				{hint.map((h, index) => (
 					<HintCard
-						className="hint-card w-full max-w-md"
 						key={index}
 						_issue={h._issue}
 						_category={h._category}
