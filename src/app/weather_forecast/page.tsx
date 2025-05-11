@@ -130,7 +130,7 @@ export default function WeatherForecast_Page() {
 	}
 
 	return (
-		<div className="flex flex-col bg-gray-100 sm:flex-row gap-y-4 sm:gap-x-4 min-h-screen items-stretch justify-center pt-20 px-8 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
+		<div className="flex flex-col bg-gray-100 sm:flex-row gap-y-4 sm:gap-x-4 min-h-screen items-stretch justify-center pt-10 px-4 pb-20 sm:px-20 font-[family-name:var(--font-geist-sans)]">
 			<div className="flex-1 aspect-[1/1] border border-black p-4">
 				<WeatherForm
 					mapName={locations}
